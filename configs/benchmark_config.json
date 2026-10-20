@@ -1,0 +1,83 @@
+{
+  "project_name": "scientific-summarization-benchmark",
+  "seed": 42,
+  "model": {
+    "model_name_or_path": "Qwen/Qwen2.5-1.5B-Instruct",
+    "torch_dtype": "bfloat16",
+    "use_qlora": true,
+    "quantization_4bit": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "gradient_checkpointing": true,
+    "trust_remote_code": true
+  },
+  "lora": {
+    "r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "bias": "none",
+    "task_type": "CAUSAL_LM",
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "dataset": {
+    "dataset_name": "ccdv/arxiv-summarization",
+    "article_column": "article",
+    "summary_column": "abstract",
+    "train_samples": 240,
+    "val_samples": 36,
+    "test_samples": 24,
+    "max_seq_length": 1024,
+    "max_target_length": 256,
+    "system_prompt": "You are an expert scientific researcher. Summarize the following research paper article concisely and accurately. Focus on the core problem, methodology, key findings, and contributions.",
+    "user_prompt_template": "Please summarize the following scientific paper:\n\n{article}"
+  },
+  "training": {
+    "output_dir": "./artifacts/checkpoints",
+    "logging_dir": "./artifacts/logs",
+    "num_train_epochs": 3,
+    "per_device_train_batch_size": 1,
+    "per_device_eval_batch_size": 1,
+    "gradient_accumulation_steps": 8,
+    "learning_rate": 2e-4,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.05,
+    "lr_scheduler_type": "cosine",
+    "logging_steps": 5,
+    "eval_steps": 15,
+    "save_steps": 30,
+    "save_total_limit": 2,
+    "fp16": false,
+    "bf16": true,
+    "optimizer": "paged_adamw_8bit",
+    "dataloader_num_workers": 2,
+    "sanity_check_samples": 4,
+    "sanity_check_steps": 30
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "min_new_tokens": 32,
+    "do_sample": false,
+    "repetition_penalty": 1.05,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "warmup_runs": 2
+  },
+  "evaluation": {
+    "bootstrap_rounds": 1000,
+    "confidence_level": 0.95,
+    "short_output_threshold": 30,
+    "save_predictions_dir": "./artifacts/predictions",
+    "reports_dir": "./artifacts/reports"
+  }
+}
