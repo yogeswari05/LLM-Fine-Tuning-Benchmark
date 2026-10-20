@@ -164,12 +164,3 @@ Every benchmark execution outputs verifiable artifacts in `./artifacts/`:
 
 ---
 
-## 7. Interview Preparation Guide
-
-For in-depth explanations designed for Machine Learning Engineer and Applied Scientist interviews, see [`reports/interview_prep.md`](reports/interview_prep.md), which covers:
-- Why LoRA initializes $B=0$ and $A \sim \mathcal{N}(0, \sigma^2)$.
-- The information-theoretic motivation for NormalFloat4 (NF4) and Double Quantization.
-- The mathematical shift between logits and labels in autoregressive causal LM loss.
-- Why naive truncation is fatal for summarization models.
-- Why asynchronous GPU execution requires `torch.cuda.synchronize()` for valid latency benchmarking.
-- The statistical justification for Paired Bootstrap Resampling over Student's t-test.
